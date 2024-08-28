@@ -37,3 +37,21 @@ def get_response(
         else [user_role_message],
     )
     return completion.choices[0].message.content
+
+def get_image_response(image_url: str) ->Optional[str]:
+    """Get a response by analyzing an image by its url with gpt4o-mini."""
+    user_role_message: ChatCompletionMessageParam = {
+            "role": "user",
+            "content": image_url,
+    }
+    system_role_message: ChatCompletionSystemMessageParam = {
+            "role": "system",
+            "content": "analyze the image by its url and describe it",
+                }
+
+    completion = openai_client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[system_role_message, user_role_message]
+                )
+
+    return completion.choices[0].message.content

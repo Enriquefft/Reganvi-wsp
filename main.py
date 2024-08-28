@@ -5,9 +5,9 @@
 
 import logging
 
-from fastapi import FastAPI, Form, Response
+from fastapi import FastAPI, Form
 
-from ai import get_response
+from ai import get_image_response, get_response
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -25,16 +25,22 @@ async def health() -> dict[str, str]:
 
 @app.post("/message")
 async def reply(
-    response: Response,
-    Body: str = Form(),
+    Body: str | None = Form(),
+    MediaUrl0: str | None = Form(None),
 ) -> str:
     """Reply to a WhatsApp message from the user."""
-    chat_response = get_response(
-        Body,
+    chat_response = (
+        get_response(
+            Body,
+        )
+        if Body
+        else get_image_response(MediaUrl0)
+        if MediaUrl0
+        else None
     )
 
-    response.headers["ngrok-skip-browser-warning"] = "any-value"
-    # response.headers["User-Agent"] = "Your-Custom-User-Agent"
+    logger.info("Received a media message from the user")
+    logger.info("Media message: %s", MediaUrl0)
 
     logger.info("Received a message from the user")
     logger.info("User message: %s", Body)
