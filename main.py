@@ -4,15 +4,10 @@
 # ruff: noqa: B008 (fastapi makes use of reusable default function calls)
 
 import logging
-from typing import Generator
 
-from fastapi import Depends, FastAPI, Form
-from sqlalchemy.orm import Session
+from fastapi import FastAPI, Form, Response
 
 from ai import get_response
-
-# Internal imports
-from models import SessionLocal, User
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -28,36 +23,18 @@ async def health() -> dict[str, str]:
     return {"msg": "up & running"}
 
 
-# Dependency
-def get_db() -> Generator[Session, None, None]:
-    """Get a database connection."""
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
 @app.post("/message")
 async def reply(
+    response: Response,
     Body: str = Form(),
-    From: str = Form(),
-    db: Session = Depends(get_db),
 ) -> str:
     """Reply to a WhatsApp message from the user."""
-    phone_number = From.removeprefix("whatsapp:")
-
-    user = db.query(User).filter(User.phone_number == phone_number).first()
-
-    if not user:
-        logger.info("User with phone number %s not found", phone_number)
-        new_user = User(phone_number=phone_number)
-        db.add(new_user)
-        db.commit()
-
     chat_response = get_response(
         Body,
     )
+
+    response.headers["ngrok-skip-browser-warning"] = "any-value"
+    # response.headers["User-Agent"] = "Your-Custom-User-Agent"
 
     logger.info("Received a message from the user")
     logger.info("User message: %s", Body)

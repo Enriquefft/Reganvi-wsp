@@ -19,12 +19,6 @@ def get_required_env[T](env_name: str, default_value: Optional[str] = None) -> s
 
 PROJECT_NAME = get_required_env("PROJECT_NAME")
 
-PG_HOST = get_required_env("PG_HOST")
-PG_DATABASE = get_required_env("PG_DATABASE")
-PG_USER = get_required_env("PG_USER")
-PG_PASSWORD = get_required_env("PG_PASSWORD")
-PG_PORT = int(get_required_env("PG_PORT", default_value="5432"))
-
 # Find your Account SID and Auth Token at twilio.com/console
 # and set the environment variables. See http://twil.io/secure
 TWILIO_ACCOUNT_SID = get_required_env("TWILIO_ACCOUNT_SID")

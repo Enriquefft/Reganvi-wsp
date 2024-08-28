@@ -5,7 +5,7 @@ from wsp import send_message, send_template_message
 
 TEST_NUMBER = "+51984724707"
 
-TEMPLATE_SID = "HX6311737e7bd5a122b251d44ed1ed52bb"
+TEMPLATE_SID = "HX268d42f3d35cd684ba0a64f31cd233cf"
 
 
 def test_send_hello_message() -> None:
