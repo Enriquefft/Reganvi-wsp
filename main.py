@@ -3,18 +3,30 @@
 # ruff: noqa: N803 (Twilio API requires Capitalized variable names)
 # ruff: noqa: B008 (fastapi makes use of reusable default function calls)
 
-import logging
+from typing import Optional
 
-from fastapi import FastAPI, Form
+from fastapi import FastAPI, Form, Request, status
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 
-from ai import get_image_response, get_response
-
-# Set up logging
-logging.basicConfig(level=logging.INFO)
-
-logger = logging.getLogger(__name__)
+from ai import get_response, identify_image
+from utils import logger
+from wsp import send_message
 
 app = FastAPI()
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(
+    request: Request, exc: RequestValidationError
+) -> JSONResponse:
+    """Handle validation errors."""
+    exc_str = f"{exc}".replace("\n", " ").replace("   ", " ")
+    logger.error(f"{request}: {exc_str}")
+    content = {"status_code": 10422, "message": exc_str, "data": None}
+    return JSONResponse(
+        content=content, status_code=status.HTTP_422_UNPROCESSABLE_ENTITY
+    )
 
 
 @app.get("/health")
@@ -24,29 +36,39 @@ async def health() -> dict[str, str]:
 
 
 @app.post("/message")
-async def reply(
-    Body: str | None = Form(),
-    MediaUrl0: str | None = Form(None),
+def reply(
+    From: str = Form(),
+    Body: Optional[str] = Form(None),
+    MediaUrl0: Optional[str] = Form(None),
 ) -> str:
     """Reply to a WhatsApp message from the user."""
-    chat_response = (
-        get_response(
-            Body,
-        )
-        if Body
-        else get_image_response(MediaUrl0)
-        if MediaUrl0
-        else None
-    )
+    user_message = Body
+    image_url = MediaUrl0
+    if not image_url and not user_message:
+        logger.error("No image or message provided")
+        return "failure"
 
-    logger.info("Received a media message from the user")
-    logger.info("Media message: %s", MediaUrl0)
+    if not image_url and user_message:
+        logger.info("Replying to text message only.")
+        chat_response = get_response(user_message)
 
-    logger.info("Received a message from the user")
-    logger.info("User message: %s", Body)
+        if chat_response is None:
+            logger.error("Failed to get a response from the chat system")
+            return "failure"
+        send_message(From, chat_response)
+        return "success"
 
-    if chat_response is None:
-        logger.error("Failed to get a response from the chat system")
-        return ""
+    if image_url:
+        if not user_message:
+            logger.info("Replying to image only.")
+            user_message = "analyze the image by its url and describe it"
+        chat_response = identify_image(user_message, image_url)
 
-    return chat_response
+        if chat_response is None:
+            logger.error("Failed to get a response from the chat system")
+            return ""
+
+        send_message(From, chat_response)
+        return "success"
+
+    return "failure"

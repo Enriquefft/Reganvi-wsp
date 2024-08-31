@@ -12,7 +12,9 @@ if TYPE_CHECKING:
 
 from typing import Optional
 
+from data import formatted_material_data
 from env import OPENAI_API_KEY
+from utils import logger
 
 openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
@@ -38,20 +40,84 @@ def get_response(
     )
     return completion.choices[0].message.content
 
-def get_image_response(image_url: str) ->Optional[str]:
+
+def get_image_response(
+    user_message: Optional[str], image_url: Optional[str]
+) -> Optional[str]:
     """Get a response by analyzing an image by its url with gpt4o-mini."""
+    if not image_url:
+        if not user_message:
+            logger.error("No image or message provided")
+            return None
+        return get_response(user_message)
+
+    if not user_message:
+        user_message = "analyze the image by its url and describe it"
+
     user_role_message: ChatCompletionMessageParam = {
-            "role": "user",
-            "content": image_url,
+        "role": "user",
+        "content": [
+            {"type": "text", "text": user_message},
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": image_url,
+                },
+            },
+        ],
     }
+
     system_role_message: ChatCompletionSystemMessageParam = {
-            "role": "system",
-            "content": "analyze the image by its url and describe it",
-                }
+        "role": "system",
+        "content": "analyze the image by its url and describe it",
+    }
 
     completion = openai_client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[system_role_message, user_role_message]
-                )
+        model="gpt-4o-mini", messages=[system_role_message, user_role_message]
+    )
 
+    return completion.choices[0].message.content
+
+
+def identify_image(user_message: str, material_image_url: str) -> Optional[str]:
+    """Analyze the image and return the closest material match in a specific format."""
+    # Step 2: Prepare the prompt with the original task and desired response structure
+    system_message = (
+        "You are an expert assistant that analyzes images and matches them with the closest material name "
+        "from the following list:\n" + formatted_material_data + "\n\n"
+        "For this task, after analyzing the provided image, generate a response in the following format:\n\n"
+        "Here is the text from the image you provided:\n\n"
+        "¡Gracias por la foto!\n"
+        "Después de analizar los datos, puedo constatar que el material al que deseas vender es [MATERIAL_NAME].\n\n"
+        "Características:\n\n"
+        "    [LIST OF CHARACTERISTICS]\n\n"
+        "El precio máximo es de [PRICE] el kilo sin IGV ajeno a tu ubicación.\n\n"
+        "¡Hay [NUMBER OF COMPANIES] empresas en [LOCATION] que desean comprar tus materiales! 😁\n\n"
+        "Ingresa a nuestra E-Commerce y Conecta 👉 https://reganvi.pe/\n\n"
+        "Ensure that you replace placeholders like [MATERIAL_NAME], [LIST OF CHARACTERISTICS], etc., with appropriate values based on the image analysis."
+    )
+
+    # Step 4: Generate the system and user messages
+    user_role_message: ChatCompletionMessageParam = {
+        "role": "user",
+        "content": [
+            {"type": "text", "text": user_message},
+            {
+                "type": "image_url",
+                "image_url": {"url": material_image_url},
+            },
+        ],
+    }
+
+    system_role_message: ChatCompletionSystemMessageParam = {
+        "role": "system",
+        "content": system_message,
+    }
+
+    # Step 5: Call GPT-4o to process the request
+    completion = openai_client.chat.completions.create(
+        model="gpt-4o-mini", messages=[system_role_message, user_role_message]
+    )
+
+    # Step 6: Extract and return the response
     return completion.choices[0].message.content
