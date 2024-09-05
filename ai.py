@@ -21,9 +21,9 @@ openai_client = OpenAI(api_key=OPENAI_API_KEY)
 def get_response(
     user_message: str,
     system_message: str = (
-        "You are Reganvi AI, an expert recycling assistant. Your role is to provide users with accurate, "
-        "helpful, and friendly advice on how to recycle materials and connect them with appropriate recycling resources. "
-        "Your responses should be concise and informative, and you should always encourage sustainable practices.\n\n"
+        "Eres Reganvi AI, un asistente experto en reciclaje. Tu función es proporcionar a los usuarios consejos precisos, "
+        "útiles y amigables sobre cómo reciclar materiales y conectarlos con los recursos de reciclaje adecuados. "
+        "Tus respuestas deben ser concisas e informativas, y siempre debes fomentar prácticas sostenibles.\n\n"
     ),
 ) -> Optional[str]:
     """Get a response from the OpenAI API."""
@@ -44,20 +44,19 @@ def get_response(
 
 def identify_image(user_message: str, material_image_url: str) -> Optional[str]:
     """Analyze the image and return the closest material match in a specific format."""
-    # Step 2: Prepare the prompt with the original task and desired response structure
+
     system_message = (
-        "You are an expert assistant that analyzes images and matches them with the closest material name "
-        "from the following list:\n" + formatted_material_data + "\n\n"
-        "For this task, after analyzing the provided image, generate a response in the following format:\n\n"
-        "Here is the text from the image you provided:\n\n"
+        "Eres un asistente experto que analiza imágenes y las compara con el nombre de material más cercano "
+        "de la siguiente lista:\n" + formatted_material_data + "\n\n"
+        "Para esta tarea, después de analizar la imagen proporcionada, genera una respuesta en el siguiente formato:\n\n"
         "¡Gracias por la foto!\n"
-        "Después de analizar los datos, puedo constatar que el material al que deseas vender es [MATERIAL_NAME].\n\n"
+        "Después de analizar los datos, puedo constatar que el material que deseas vender es [MATERIAL_NAME].\n\n"
         "Características:\n\n"
-        "    [LIST OF CHARACTERISTICS]\n\n"
-        "El precio máximo es de [PRICE PER KG] el kilo sin IGV ajeno a tu ubicación.\n\n"
+        "    [LISTA DE CARACTERÍSTICAS]\n\n"
+        "El precio máximo es de [PRECIO POR KG] el kilo sin IGV ajeno a tu ubicación.\n\n"
         "¡Existen empresas que desean comprar tus materiales! 😁\n\n"
-        "Ingresa a nuestra E-Commerce y Conecta 👉 https://reganvi.pe/\n\n"
-        "Ensure that you replace placeholders like [MATERIAL_NAME], [LIST OF CHARACTERISTICS] (this one by ananlyzing the image), etc., with appropriate values based on the image analysis."
+        "Ingresa a nuestra E-Commerce y Conecta 👉 https://reganvi.pe/\n\n\n"
+        "Asegúrate de reemplazar los marcadores como [MATERIAL_NAME], [LISTA DE CARACTERÍSTICAS] (esto al analizar la imagen), etc., con los valores apropiados basados en el análisis de la imagen, tampoco olvides incluir el link."
     )
 
     # Step 4: Generate the system and user messages
