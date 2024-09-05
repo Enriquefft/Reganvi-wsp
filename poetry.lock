@@ -1363,6 +1363,19 @@ PyJWT = ">=2.0.0,<3.0.0"
 requests = ">=2.0.0"
 
 [[package]]
+name = "twilio-stubs"
+version = "0.2.0"
+description = "Type declarations for the Twilio API"
+optional = false
+python-versions = "*"
+files = [
+    {file = "twilio-stubs-0.2.0.tar.gz", hash = "sha256:15638201295aef536451d31282133544406e334550ed276e40e63877e79b89b8"},
+]
+
+[package.dependencies]
+twilio = ">=7.16.3"
+
+[[package]]
 name = "typer"
 version = "0.12.3"
 description = "Typer, build great CLIs. Easy to code. Based on Python type hints."
@@ -1750,4 +1763,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "35ac7e363dcbab91b1e0c031d72a8bf4fde0ccbcfdafa2ac1a4715f9b2bbead2"
+content-hash = "702b9297641954b6ffbab3fca6abc004ee0848b8c8ab60e568d8678073e863db"
