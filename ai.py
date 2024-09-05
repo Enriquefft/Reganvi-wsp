@@ -20,24 +20,22 @@ openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
 def get_response(
     user_message: str,
-    system_message: str = (
-        "You are Reganvi AI, an expert recycling assistant. Your role is to provide users with accurate, "
-        "helpful, and friendly advice on how to recycle materials and connect them with appropriate recycling resources. "
-        "Your responses should be concise and informative, and you should always encourage sustainable practices.\n\n"
-    ),
+    system_message: Optional[str] = None,
 ) -> Optional[str]:
     """Get a response from the OpenAI API."""
     user_role_message: ChatCompletionMessageParam = {
         "role": "user",
         "content": user_message,
     }
-    system_role_message: ChatCompletionSystemMessageParam | None = {
-        "role": "system",
-        "content": system_message,
-    }
+    system_role_message: ChatCompletionSystemMessageParam | None = (
+        {"role": "system", "content": system_message} if system_message else None
+    )
 
     completion = openai_client.chat.completions.create(
-        model="gpt-4o", messages=[system_role_message, user_role_message]
+        model="gpt-4o",
+        messages=[system_role_message, user_role_message]
+        if system_role_message
+        else [user_role_message],
     )
     return completion.choices[0].message.content
 
