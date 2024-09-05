@@ -166,4 +166,4 @@ material_data: list[MaterialData] = [
     },
 ]
 
-formatted_material_data= transform_material_data(material_data)
+formatted_material_data = transform_material_data(material_data)

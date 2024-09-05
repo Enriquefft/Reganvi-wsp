@@ -14,7 +14,6 @@ from typing import Optional
 
 from data import formatted_material_data
 from env import OPENAI_API_KEY
-from utils import logger
 
 openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
@@ -33,49 +32,11 @@ def get_response(
     )
 
     completion = openai_client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4o",
         messages=[system_role_message, user_role_message]
         if system_role_message
         else [user_role_message],
     )
-    return completion.choices[0].message.content
-
-
-def get_image_response(
-    user_message: Optional[str], image_url: Optional[str]
-) -> Optional[str]:
-    """Get a response by analyzing an image by its url with gpt4o-mini."""
-    if not image_url:
-        if not user_message:
-            logger.error("No image or message provided")
-            return None
-        return get_response(user_message)
-
-    if not user_message:
-        user_message = "analyze the image by its url and describe it"
-
-    user_role_message: ChatCompletionMessageParam = {
-        "role": "user",
-        "content": [
-            {"type": "text", "text": user_message},
-            {
-                "type": "image_url",
-                "image_url": {
-                    "url": image_url,
-                },
-            },
-        ],
-    }
-
-    system_role_message: ChatCompletionSystemMessageParam = {
-        "role": "system",
-        "content": "analyze the image by its url and describe it",
-    }
-
-    completion = openai_client.chat.completions.create(
-        model="gpt-4o-mini", messages=[system_role_message, user_role_message]
-    )
-
     return completion.choices[0].message.content
 
 
@@ -91,10 +52,10 @@ def identify_image(user_message: str, material_image_url: str) -> Optional[str]:
         "Después de analizar los datos, puedo constatar que el material al que deseas vender es [MATERIAL_NAME].\n\n"
         "Características:\n\n"
         "    [LIST OF CHARACTERISTICS]\n\n"
-        "El precio máximo es de [PRICE] el kilo sin IGV ajeno a tu ubicación.\n\n"
-        "¡Hay [NUMBER OF COMPANIES] empresas en [LOCATION] que desean comprar tus materiales! 😁\n\n"
+        "El precio máximo es de [PRICE PER KG] el kilo sin IGV ajeno a tu ubicación.\n\n"
+        "¡Existen empresas que desean comprar tus materiales! 😁\n\n"
         "Ingresa a nuestra E-Commerce y Conecta 👉 https://reganvi.pe/\n\n"
-        "Ensure that you replace placeholders like [MATERIAL_NAME], [LIST OF CHARACTERISTICS], etc., with appropriate values based on the image analysis."
+        "Ensure that you replace placeholders like [MATERIAL_NAME], [LIST OF CHARACTERISTICS] (this one by ananlyzing the image), etc., with appropriate values based on the image analysis."
     )
 
     # Step 4: Generate the system and user messages
@@ -116,7 +77,7 @@ def identify_image(user_message: str, material_image_url: str) -> Optional[str]:
 
     # Step 5: Call GPT-4o to process the request
     completion = openai_client.chat.completions.create(
-        model="gpt-4o-mini", messages=[system_role_message, user_role_message]
+        model="gpt-4o", messages=[system_role_message, user_role_message]
     )
 
     # Step 6: Extract and return the response
