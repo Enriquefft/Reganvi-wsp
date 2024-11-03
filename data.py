@@ -19,8 +19,8 @@ def transform_material_data(material_data: list[MaterialData]) -> str:
         transformed_data += (
             f"Item ID: {material['item_id']}, "
             f"Material name: {material['material']}, "
-            f"Price per kg: {material['price_kg']} USD, "
-            f"Price per ton: {material['price_ton']} USD.\n"
+            f"Price per kg: {material['price_kg']} PEN, "
+            f"Price per ton: {material['price_ton']} PEN.\n"
         )
     return transformed_data
 
@@ -61,27 +61,27 @@ material_data: list[MaterialData] = [
     {
         "item_id": 8,
         "material": "CHATARRA LIVIANA",
-        "price_kg": 0.71,
-        "price_ton": 710.00,
+        "price_kg": 0.81,
+        "price_ton": 810.00,
     },
     {
         "item_id": 9,
         "material": "CHATARRA PESADA",
-        "price_kg": 0.73,
-        "price_ton": 730.00,
+        "price_kg": 0.72,
+        "price_ton": 720.00,
     },
     {"item_id": 10, "material": "BOTELLAS PET", "price_kg": 2.90, "price_ton": 2900.00},
     {
         "item_id": 11,
         "material": "PLASTICO DURO",
-        "price_kg": 1.50,
-        "price_ton": 1500.00,
+        "price_kg": 1.56,
+        "price_ton": 1560.00,
     },
     {
         "item_id": 12,
         "material": "PLASTICO FILL LIMPIO",
-        "price_kg": 2.10,
-        "price_ton": 2100.00,
+        "price_kg": 2.00,
+        "price_ton": 2000.00,
     },
     {
         "item_id": 13,
@@ -92,34 +92,34 @@ material_data: list[MaterialData] = [
     {
         "item_id": 14,
         "material": "ALUMINIO LIVIANO",
-        "price_kg": 4.50,
-        "price_ton": 4500.00,
+        "price_kg": 5.00,
+        "price_ton": 5000.00,
     },
     {
         "item_id": 15,
         "material": "ALUMINIO PESADO",
-        "price_kg": 3.50,
-        "price_ton": 3500.00,
+        "price_kg": 5.50,
+        "price_ton": 5500.00,
     },
-    {"item_id": 16, "material": "PVC", "price_kg": 1.20, "price_ton": 1200.00},
-    {"item_id": 17, "material": "CARTON", "price_kg": 0.51, "price_ton": 510.00},
+    {"item_id": 16, "material": "PVC", "price_kg": 1.25, "price_ton": 1250.00},
+    {"item_id": 17, "material": "CARTON", "price_kg": 0.52, "price_ton": 520.00},
     {
         "item_id": 18,
         "material": "PAPEL MIXTO COLOR",
-        "price_kg": 0.45,
-        "price_ton": 450.00,
+        "price_kg": 0.65,
+        "price_ton": 650.00,
     },
-    {"item_id": 19, "material": "VIDRIO", "price_kg": 0.28, "price_ton": 280.00},
-    {"item_id": 20, "material": "TETRAPACK", "price_kg": 0.80, "price_ton": 800.00},
-    {"item_id": 21, "material": "CARTOPLAS", "price_kg": 1.10, "price_ton": 1100.00},
+    {"item_id": 19, "material": "VIDRIO", "price_kg": 0.31, "price_ton": 310.00},
+    {"item_id": 20, "material": "TETRAPACK", "price_kg": 0.85, "price_ton": 850.00},
+    {"item_id": 21, "material": "CARTOPLAS", "price_kg": 1.00, "price_ton": 1000.00},
     {"item_id": 22, "material": "MADERA LEÑA", "price_kg": 1.00, "price_ton": 1000.00},
     {
         "item_id": 23,
         "material": "LONA (ZAPATILLA)",
-        "price_kg": 1.60,
-        "price_ton": 1600.00,
+        "price_kg": 1.51,
+        "price_ton": 1510.00,
     },
-    {"item_id": 24, "material": "COCALATA", "price_kg": 1.40, "price_ton": 1400.00},
+    {"item_id": 24, "material": "COCALATA", "price_kg": 5.51, "price_ton": 5510.00},
     {
         "item_id": 25,
         "material": "CAUCHOS (LLANTAS)",
@@ -129,22 +129,22 @@ material_data: list[MaterialData] = [
     {
         "item_id": 26,
         "material": "PAPEL DE REVISTA",
-        "price_kg": 0.90,
-        "price_ton": 900.00,
+        "price_kg": 0.40,
+        "price_ton": 400.00,
     },
-    {"item_id": 27, "material": "ALTO IMPACTO", "price_kg": 3.50, "price_ton": 3500.00},
-    {"item_id": 28, "material": "ACERO", "price_kg": 0.39, "price_ton": 390.00},
+    {"item_id": 27, "material": "ALTO IMPACTO", "price_kg": 0.50, "price_ton": 500.00},
+    {"item_id": 28, "material": "ACERO", "price_kg": 3.51, "price_ton": 3510.00},
     {
         "item_id": 29,
         "material": "PET PRESADO COLORES",
-        "price_kg": 1.50,
-        "price_ton": 1500.00,
+        "price_kg": 0.70,
+        "price_ton": 700.00,
     },
     {
         "item_id": 30,
         "material": "PET PRESADO YOGURT",
-        "price_kg": 1.61,
-        "price_ton": 1610.00,
+        "price_kg": 0.61,
+        "price_ton": 610.00,
     },
     {
         "item_id": 31,
@@ -155,8 +155,8 @@ material_data: list[MaterialData] = [
     {
         "item_id": 32,
         "material": "TAPITAS DE BOTELLA",
-        "price_kg": 1.45,
-        "price_ton": 1450.00,
+        "price_kg": 1.00,
+        "price_ton": 1000.00,
     },
     {
         "item_id": 33,
