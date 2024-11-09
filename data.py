@@ -70,7 +70,7 @@ material_data: list[MaterialData] = [
         "price_kg": 0.72,
         "price_ton": 720.00,
     },
-    {"item_id": 10, "material": "BOTELLAS PET", "price_kg": 2.90, "price_ton": 2900.00},
+    {"item_id": 10, "material": "BOTELLAS PET", "price_kg": 2.10, "price_ton": 2100.00},
     {
         "item_id": 11,
         "material": "PLASTICO DURO",
