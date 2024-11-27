@@ -27,6 +27,23 @@ def get_response(
     ),
 ) -> Optional[str]:
     """Get a response from the OpenAI API."""
+    # Definimos frases relacionadas al contexto de preguntas frecuentes
+    trigger_phrases = [
+        "Hola, quiero saber cuánto cuesta un material",
+        "¿Cuánto cuesta este material?",
+        "Quiero vender este material, ¿cuánto vale?",
+        "¿Qué precio tiene este producto?",
+        "Quiero saber el valor de un material",
+    ]
+
+    # Verificación de las frases o ventana de contexto del input
+    if any(phrase.lower() in user_message.lower() for phrase in trigger_phrases):
+        # Si cumple, retorna las siguientes frases
+        return (
+            "Perfecto, por favor sube una imagen o toma una foto del producto. "
+            "Así podré ayudarte a identificarlo y ofrecerte más información."
+        )
+    
     user_role_message: ChatCompletionMessageParam = {
         "role": "user",
         "content": user_message,
